@@ -1,0 +1,62 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+h1{
+  color:rgb(22, 0, 36);
+  background-color: aliceblue;
+  padding: 20px;
+  border-radius: 10px;
+  border: 10px solid rgb(22, 0, 36);
+}
+
+#mouse-coordinates {
+  position: absolute;
+  top: 0; 
+  right: 5vw;
+  color: aliceblue;
+  font-weight: 900 ;
+}
+
+h1:hover{
+  color:rgb(155, 57, 216);
+  border-color: rgb(155, 57, 216);
+  box-shadow: 10px 10px rgb(22, 0, 36);
+  /* background-color: transparent; */
+}
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+canvas {
+  border: 10px solid rgb(155, 57, 216); 
+  border-radius: 10px;
+  width: 1200px;
+  height: 600px;
+  box-shadow: 30px 30px rgb(22, 0, 36);
+  background-color: aliceblue;
+}
+
