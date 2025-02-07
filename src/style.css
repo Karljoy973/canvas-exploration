@@ -22,25 +22,24 @@ body {
   flex-direction: column;
 }
 
-h1{
-  color:rgb(22, 0, 36);
+h1 {
+  color: rgb(22, 0, 36);
   background-color: aliceblue;
   padding: 20px;
-  border-radius: 10px;
-  border: 10px solid rgb(22, 0, 36);
+  outline: 10px solid rgb(22, 0, 36);
 }
 
 #mouse-coordinates {
   position: absolute;
-  top: 0; 
+  top: 0;
   right: 5vw;
   color: aliceblue;
-  font-weight: 900 ;
+  font-weight: 900;
 }
 
-h1:hover{
-  color:rgb(155, 57, 216);
-  border-color: rgb(155, 57, 216);
+h1:hover {
+  color: rgb(155, 57, 216);
+  outline-color: rgb(155, 57, 216);
   box-shadow: 10px 10px rgb(22, 0, 36);
   /* background-color: transparent; */
 }
@@ -52,11 +51,10 @@ h1:hover{
 }
 
 canvas {
-  border: 10px solid rgb(155, 57, 216); 
-  border-radius: 10px;
-  width: 1200px;
-  height: 600px;
+  outline: 10px solid rgb(155, 57, 216);
+  outline-style: solid;
   box-shadow: 30px 30px rgb(22, 0, 36);
+  width: 600px;
+  height: 450px;
   background-color: aliceblue;
 }
-
