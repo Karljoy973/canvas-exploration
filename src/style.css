@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* color: rgba(255, 255, 255, 0.1); */
+  background-color: rgb(36, 36, 36);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -56,5 +56,5 @@ canvas {
   box-shadow: 30px 30px rgb(22, 0, 36);
   width: 600px;
   height: 450px;
-  background-color: aliceblue;
+  background-color: rgb(255, 255, 255);
 }

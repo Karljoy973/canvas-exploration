@@ -74,7 +74,7 @@ export class Chart {
   //I will split this Chart class with a Chart vue, a chart model and a chart controller later on
   private _targetId: string;
   private _canvas: HTMLCanvasElement;
-  private _context: CanvasRenderingContext2D
+  private _context: CanvasRenderingContext2D;
   private _width: number;
   private _height: number;
 
@@ -87,7 +87,7 @@ export class Chart {
 
   //TODO refactor later on - Axes specs
   private _axesRatio: number;
-  private _axesColor: string = "#b1b1b1";
+  private _axesColor: string = "black";
   private _axesWidth: number;
   private _axesHeight: number;
   private _verticalMargins: number;
@@ -109,7 +109,7 @@ export class Chart {
   private _verticalLowerBound: number;
   private _horizontalLowerBound: number;
 
-  private _axesLineWidth: number = 1;
+  private _axesLineWidth: number = 2;
   private _guidelineWidth: number;
   private _guidelineColor: string;
 
@@ -133,8 +133,8 @@ export class Chart {
       console.log(e);
     }
 
-    if(!data.length) throw Error('Invalid data provided')
- 
+    if (!data.length) throw Error("Invalid data provided");
+
     //model
     this._data = [...data];
 
@@ -154,22 +154,27 @@ export class Chart {
     );
 
     this._verticalFrequency = this._higherYvalue / this._data.length;
+    this._horizontalFrequency = this._higherXvalue / this._data.length; 
     this._horizontalFontsize = this._higherXvalue / this._data.length;
-
 
     this._targetId = targetId;
     this._canvas = document.getElementById(this._targetId) as HTMLCanvasElement;
-    if(!this._canvas.getContext('2d')) throw new Error('Internal Error')
-    this._context = this._canvas.getContext('2d') as CanvasRenderingContext2D;
-    this._width = this._canvas.clientWidth;
-    this._height = this._canvas.clientHeight;
+    if (!this._canvas.getContext("2d")) throw new Error("Internal Error");
+    this._context = this._canvas.getContext("2d") as CanvasRenderingContext2D;
+    this._width = this._canvas.width;
+    this._height = this._canvas.height;
 
     //axes config
-    this._axesRatio = 3;
-    this._verticalMargins = (this._width * this._axesRatio) / 100;
+    this._axesRatio = 10;
+    this._verticalMargins = (this._height * this._axesRatio) / 100;
     this._horizontalMargins = (this._width * this._axesRatio) / 100;
     this._axesWidth = this._width - 2 * this._horizontalMargins;
     this._axesHeight = this._height - 2 * this._verticalMargins;
+    this._verticalUpperBound = Math.ceil(this._higherYvalue / 10) * 10;
+    this._verticalLowerBound = Math.floor(this._lowerYvalue / 10) * 10;
+
+    this._horizontalUpperBound = Math.ceil(this._higherXvalue / 10) * 10; 
+    this._horizontalLowerBound = Math.floor(this._lowerXvalue/10)*10
 
     //label config
     this._fontRatio = 3;
@@ -183,19 +188,61 @@ export class Chart {
     //Guidelines Configs
     this._guidelineWidth = 0.5;
     this._guidelineColor = "#e5e6e7";
+    console.log(this);
   }
   public BarChart() {
-    console.log(this);
+    this._RenderBarChartAxis();
+    this._RenderLabels();
+  }
 
-    //draw vertical axis 
-    this._context.beginPath()
+  private _RenderBarChartAxis() {
+    //draw vertical axis
+    this._context.beginPath();
     this._context.strokeStyle = this._axesColor;
-    this._context.lineWidth = this._axesLineWidth
-    this._context.moveTo(this._horizontalMargins, this._verticalMargins)
-    this._context.lineTo(this._horizontalMargins, this._axesHeight)
-    this._context.stroke()
+    this._context.lineWidth = this._axesLineWidth;
+    this._context.moveTo(this._horizontalMargins, this._verticalMargins);
+    this._context.lineTo(
+      this._horizontalMargins,
+      this._height - this._verticalMargins,
+    );
+    this._context.stroke();
     //draw horizontal axis
+    this._context.beginPath();
+    this._context.strokeStyle = this._axesColor;
+    this._context.lineWidth = this._axesLineWidth;
+    this._context.moveTo(
+      this._horizontalMargins,
+      this._height - this._verticalMargins,
+    );
+    this._context.lineTo(this._axesWidth, this._height - this._verticalMargins);
+    this._context.stroke();
+  }
 
+  private _RenderLabels() {
+    //vertical labels
+    this._context.font = `${this._fontStyle} ${this._fontWeight} ${this._verticalFontSize}px  ${this._fontColor}`;
+    this._context.fillStyle = this._fontColor;
+    this._context.textAlign = "right";
+    let ylabels = this._data.map(
+      (e, i) =>
+        `${Math.floor(this._verticalUpperBound - i * this._verticalFrequency)}`,
+    );
+    let verticalLabelX = this._data.map(
+      (e) =>
+        this._horizontalMargins - this._horizontalMargins / this._axesRatio,
+    );
+    let verticalLabelY = this._data.map(
+      (e, i) =>
+        this._verticalMargins +
+        (i * this._verticalFrequency * this._axesHeight) /
+          this._verticalUpperBound,
+    );
+    this._data.forEach((e, i) =>
+      this._context.fillText(ylabels[i], verticalLabelX[i], verticalLabelY[i]),
+    );
+
+    //horizontal labels 
+    let xlabels = this._data.map((e, i) => { Math.floor(this._horizontalUpperBound - i * this._horizontalFrequency)})
 
   }
 }
@@ -203,32 +250,32 @@ export class Chart {
 //maintenant j'ai des labeled points
 export const ChartData = [
   {
-    label: { "x-label": "January", "y-label": "" },
-    coordinate: { x: Math.random(), y: Math.random() },
+    label: { "x-label": "January" },
+    coordinate: { x: 1, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "Febuary", "y-label": "" },
-    coordinate: { x: Math.random(), y: Math.random() },
+    label: { "x-label": "Febuary" },
+    coordinate: { x:2 , y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "March", "y-label": "" },
-    coordinate: { x: Math.random(), y: Math.random() },
+    label: { "x-label": "March" },
+    coordinate: { x: 3, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "April", "y-label": "" },
-    coordinate: { x: Math.random(), y: Math.random() },
+    label: { "x-label": "April" },
+    coordinate: { x: 4, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "May", "y-label": "" },
-    coordinate: { x: Math.random(), y: Math.random() },
+    label: { "x-label": "May" },
+    coordinate: { x: 5, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "June", "y-label": "" },
-    coordinate: { x: Math.random(), y: Math.random() },
+    label: { "x-label": "June" },
+    coordinate: { x: 6, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "July", "y-label": "" },
-    coordinate: { x: Math.random(), y: Math.random() },
+    label: { "x-label": "July" },
+    coordinate: { x: 7, y: Math.random() * 100 },
   },
 ];
 
