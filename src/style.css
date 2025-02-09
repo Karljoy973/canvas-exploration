@@ -38,7 +38,7 @@ h1 {
 }
 
 h1:hover {
-  color: rgb(155, 57, 216);
+  color: #9b39d8;
   outline-color: rgb(155, 57, 216);
   box-shadow: 10px 10px rgb(22, 0, 36);
   /* background-color: transparent; */

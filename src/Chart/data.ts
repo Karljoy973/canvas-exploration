@@ -153,17 +153,14 @@ export class Chart {
       ...(this._data.map((e) => e.coordinate.y) as number[]),
     );
 
-    this._verticalFrequency = this._higherYvalue / this._data.length;
-    this._horizontalFrequency = this._higherXvalue / this._data.length; 
-    this._horizontalFontsize = this._higherXvalue / this._data.length;
-
+    
     this._targetId = targetId;
     this._canvas = document.getElementById(this._targetId) as HTMLCanvasElement;
     if (!this._canvas.getContext("2d")) throw new Error("Internal Error");
     this._context = this._canvas.getContext("2d") as CanvasRenderingContext2D;
     this._width = this._canvas.width;
     this._height = this._canvas.height;
-
+    
     //axes config
     this._axesRatio = 10;
     this._verticalMargins = (this._height * this._axesRatio) / 100;
@@ -172,6 +169,11 @@ export class Chart {
     this._axesHeight = this._height - 2 * this._verticalMargins;
     this._verticalUpperBound = Math.ceil(this._higherYvalue / 10) * 10;
     this._verticalLowerBound = Math.floor(this._lowerYvalue / 10) * 10;
+    
+    this._verticalFrequency = this._higherYvalue / this._data.length;
+    this._horizontalFrequency = this._axesWidth  / (this._data.length); 
+    this._horizontalFontsize = this._higherXvalue / this._data.length;
+
 
     this._horizontalUpperBound = Math.ceil(this._higherXvalue / 10) * 10; 
     this._horizontalLowerBound = Math.floor(this._lowerXvalue/10)*10
@@ -179,9 +181,9 @@ export class Chart {
     //label config
     this._fontRatio = 3;
     this._fontFamily = "Roboto";
-    this._fontColor = "#b1b1b1";
+    this._fontColor = "#000";
     this._fontStyle = "normal";
-    this._fontWeight = "300";
+    this._fontWeight = "100";
     this._verticalFontSize = (this._height * this._fontRatio) / 100;
     this._horizontalFontsize = (this._width * this._fontRatio) / 100;
 
@@ -193,6 +195,7 @@ export class Chart {
   public BarChart() {
     this._RenderBarChartAxis();
     this._RenderLabels();
+    this._RenderBars()
   }
 
   private _RenderBarChartAxis() {
@@ -214,9 +217,10 @@ export class Chart {
       this._horizontalMargins,
       this._height - this._verticalMargins,
     );
-    this._context.lineTo(this._axesWidth, this._height - this._verticalMargins);
+    this._context.lineTo(this._width -this._horizontalMargins, this._height - this._verticalMargins);
     this._context.stroke();
   }
+
 
   private _RenderLabels() {
     //vertical labels
@@ -240,41 +244,63 @@ export class Chart {
     this._data.forEach((e, i) =>
       this._context.fillText(ylabels[i], verticalLabelX[i], verticalLabelY[i]),
     );
-
+    
+    this._context.textBaseline = "top"
     //horizontal labels 
-    let xlabels = this._data.map((e, i) => { Math.floor(this._horizontalUpperBound - i * this._horizontalFrequency)})
+    let xlabels = this._data.map((e, i) =>  (e.label["x-label"] as string))
+    let horizontalLabelX = this._data.map((e, i) => this._horizontalMargins +i* this._horizontalFrequency +this._horizontalFrequency/2); 
+    let horizontalLabelY = this._data.map(e => this._height - this._verticalMargins + this._axesRatio/3)
+    this._data.forEach((e, i) => this._context.fillText(xlabels[i], horizontalLabelX[i], horizontalLabelY[i]))
+    
+  }
 
+  private _RenderBars() {
+    let barX: number;
+    let barY: number; 
+    let barWidth: number; 
+    let barHeigth: number; 
+
+    this._context.fillStyle = "#9b39d8"
+
+    this._data.forEach((e, i) => {
+      barX = this._horizontalMargins + i * this._horizontalFrequency
+      barY = this._height - this._verticalMargins
+      barWidth = this._horizontalFrequency/2; 
+      barHeigth = -1* e.coordinate.y*this._verticalUpperBound/ (this._higherYvalue)
+      this._context.fillRect(barX, barY, barWidth, barHeigth)
+    })
   }
 }
 
 //maintenant j'ai des labeled points
+//je veux retravailler la datastructure que j'attends 
 export const ChartData = [
   {
-    label: { "x-label": "January" },
+    label: { "x-label": "Jan", "y-label":"" },
     coordinate: { x: 1, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "Febuary" },
+    label: { "x-label": "Feb", "y-label":"" },
     coordinate: { x:2 , y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "March" },
+    label: { "x-label": "Mar", "y-label":"" },
     coordinate: { x: 3, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "April" },
+    label: { "x-label": "Apr", "y-label":"" },
     coordinate: { x: 4, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "May" },
+    label: { "x-label": "May", "y-label":"" },
     coordinate: { x: 5, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "June" },
+    label: { "x-label": "Jun", "y-label":"" },
     coordinate: { x: 6, y: Math.random() * 100 },
   },
   {
-    label: { "x-label": "July" },
+    label: { "x-label": "Jul", "y-label":"" },
     coordinate: { x: 7, y: Math.random() * 100 },
   },
 ];
