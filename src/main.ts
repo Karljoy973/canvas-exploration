@@ -1,4 +1,5 @@
 import './style.css'
+import img from "../assets/img.jpg"
 
 window.addEventListener('load', () => {
 
@@ -96,13 +97,21 @@ window.addEventListener('load', () => {
     context.stroke()
 
     //TODO - Discover how the coordinate system works 
+  let img = new Image()
+  
+  img.src = `../assets/img0.jpg`
+  
+  img.onload = () => context.drawImage(img, 5, 12, 180, 90)
+  
 
-
-
-    //NOTE - Upscale / downscale the canvas - à placer avant de faire les transformations qui nous intéressent  
-    //NOTE - Toutes les transformations appliquées au contexte doivent se faire avant de commencer à dessiner 
-    // context.scale(0.25, 0.25)
-    // requestAnimationFrame(() => {
+  //NOTE - getImageData nous permet d'avoir les cannaux rgb et derriere de pouvoir faire du traitement d'images ! 
+  //NOTE - save permet de sauvegarder l'etat du canvas dans une pile au moment où on l'utilise 
+    //NOTE - restore nous permet de réutiliser ce state 
+    //NOTE on peut prendre le contenu d'un canvas et le mettre dans une baliise img en utilisant la methode toDataURL() et on passe le resultat à img.src()
+  //NOTE - Upscale / downscale the canvas - à placer avant de faire les transformations qui nous intéressent  
+  //NOTE - Toutes les transformations appliquées au contexte doivent se faire avant de commencer à dessiner 
+  // context.scale(0.25, 0.25)
+  // requestAnimationFrame(() => {
         
-    // })
+  //   })
 })
