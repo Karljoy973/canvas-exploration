@@ -99,9 +99,16 @@ window.addEventListener('load', () => {
     //TODO - Discover how the coordinate system works 
   let img = new Image()
   
-  img.src = `../assets/img0.jpg`
+  img.src = `../assets/img1.png`
   
-  img.onload = () => context.drawImage(img, 5, 12, 180, 90)
+  img.onload = () => {
+    let gradient = context.createLinearGradient(10, 22, 172, 188)
+    gradient.addColorStop(0, "green");
+    gradient.addColorStop(0.3, "yellow")
+    gradient.addColorStop(1, "blue")
+    context.fillStyle = gradient
+    context.fillRect(0, 0, 200, 100)
+  }
   
 
   //NOTE - getImageData nous permet d'avoir les cannaux rgb et derriere de pouvoir faire du traitement d'images ! 
